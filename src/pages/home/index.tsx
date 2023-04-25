@@ -1,3 +1,9 @@
+import MainLayout from "../../components/layout/MainLayout";
+
 export default function Home() {
-  return <div className="container">Home</div>;
+  return (
+    <MainLayout>
+      <div className="container">Home</div>
+    </MainLayout>
+  );
 }

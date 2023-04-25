@@ -1,5 +1,14 @@
 @import url('https://fonts.cdnfonts.com/css/fugaz-one');
 
+html, body{
+  margin: 0;
+  padding: 0;
+}
+
+body > #root > div {
+  height: 100vh;
+}
+
 .App {
   text-align: center;
 }
@@ -53,4 +62,52 @@
   color: #61dafb;
   font-family: 'Fugaz One';
   overflow: hidden;
+}
+
+.login-container{
+  text-align: center;
+  padding-top: 100px;
+  background-image: url('https://i.pinimg.com/originals/3d/08/e0/3d08e03cb40252526fee2036a67f07f1.gif');
+}
+
+.title-login{
+  font-family: 'Fugaz One';
+  background-image: linear-gradient(
+    -225deg,
+    #231557 0%,
+    #44107a 29%,
+    #ff1361 67%,
+    #fff800 100%
+  );
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  color: #fff;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 4s linear infinite;
+  display: inline-block;
+      font-size: 100px;
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.login-form {
+  max-width: 300px;
+  margin: 0 auto;
+  background: rgba(220,220,220,0.8);
+  padding: 30px 20px 5px 20px;
+  border-radius: 20px;
+}
+.login-form-forgot {
+  float: right;
+}
+.login-form-button {
+  width: 100%;
 }
