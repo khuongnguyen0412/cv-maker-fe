@@ -1,15 +1,41 @@
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Checkbox, Form, Input, notification } from "antd";
+import authService from "../../services/auth.service";
+import { useNavigate } from "react-router-dom";
+import { WarningOutlined } from "@ant-design/icons";
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  const onFinish = async (values: any) => {
+    const result = await authService.login(values.email, values.password);
+    if (result) {
+      navigate("/");
+    } else {
+      notification.error({
+        message: "Email or Password is incorrect!",
+        placement: "topRight",
+      });
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="title-login">CV Maker</div>
-      <Form className="login-form">
-        <Form.Item>
-          <Input placeholder="Username" />
+      <Form className="login-form" onFinish={onFinish}>
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: "Please input your email!" }]}
+          style={{ paddingLeft: "22px" }}
+        >
+          <Input placeholder="Email" />
         </Form.Item>
-        <Form.Item>
-          <Input type="password" placeholder="Password" />
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input type="password" />
         </Form.Item>
         <Form.Item>
           <Checkbox>Remember me</Checkbox>
