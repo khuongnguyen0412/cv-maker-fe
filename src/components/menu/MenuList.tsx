@@ -1,4 +1,9 @@
-import { HomeOutlined, FileDoneOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  FileDoneOutlined,
+  UserOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 
 const menus = [
   {
@@ -10,6 +15,18 @@ const menus = [
     key: "/my-cv",
     icon: <FileDoneOutlined />,
     label: "My CV",
+  },
+  {
+    key: "/account",
+    icon: <UserOutlined />,
+    label: "Account",
+    children: [
+      {
+        key: "/account/logout",
+        icon: <LogoutOutlined />,
+        label: "Account",
+      },
+    ],
   },
 ];
 
