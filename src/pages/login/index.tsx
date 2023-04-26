@@ -1,7 +1,6 @@
 import { Button, Checkbox, Form, Input, notification } from "antd";
 import authService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
-import { WarningOutlined } from "@ant-design/icons";
 
 export default function Login() {
   const navigate = useNavigate();
