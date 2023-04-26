@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/home";
-import CVList from "./pages/cv";
 import Login from "./pages/login";
 import { RequireAuth } from "./guards/RequireAuth";
+import Add from "./pages/cv/add";
+import List from "./pages/cv/list";
 
 function App() {
   return (
@@ -18,10 +19,12 @@ function App() {
         <Route
           path="/my-cv"
           element=<RequireAuth>
-            <CVList />
+            <List />
           </RequireAuth>
         />
         <Route path="/login" element=<Login /> />
+        <Route path="/my-cv" element=<List /> />
+        <Route path="/my-cv/add" element=<Add /> />
       </Routes>
     </Router>
   );
