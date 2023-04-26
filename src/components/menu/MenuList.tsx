@@ -3,6 +3,8 @@ import {
   FileDoneOutlined,
   UserOutlined,
   LogoutOutlined,
+  UnorderedListOutlined,
+  FileAddOutlined,
 } from "@ant-design/icons";
 
 const menus = [
@@ -15,6 +17,18 @@ const menus = [
     key: "/my-cv",
     icon: <FileDoneOutlined />,
     label: "My CV",
+    children: [
+      {
+        key: "/my-cv/list",
+        icon: <UnorderedListOutlined />,
+        label: "List",
+      },
+      {
+        key: "/my-cv/add",
+        icon: <FileAddOutlined />,
+        label: "Add New",
+      },
+    ],
   },
   {
     key: "/account",
@@ -24,7 +38,7 @@ const menus = [
       {
         key: "/account/logout",
         icon: <LogoutOutlined />,
-        label: "Account",
+        label: "Logout",
       },
     ],
   },

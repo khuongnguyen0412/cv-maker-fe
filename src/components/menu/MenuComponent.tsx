@@ -10,7 +10,12 @@ export default function MenuComponent(props: any) {
       mode="inline"
       defaultSelectedKeys={["/"]}
       onSelect={(e) => {
-        navigate(e.key);
+        if (e.key === "/account/logout") {
+          localStorage.removeItem("token");
+          navigate("/login");
+        }else{
+          navigate(e.key);
+        }
       }}
       items={menus}
     />
