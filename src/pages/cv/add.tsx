@@ -68,6 +68,7 @@ export default function Add() {
       experince,
       projects,
       userId: Number((await authService.getUserInfo()).id),
+      skills: values.skills.toString()
     };
 
     // Submit
