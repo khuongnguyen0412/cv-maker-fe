@@ -1,6 +1,16 @@
 import "./index.css";
 import MainLayout from "../../components/layout/MainLayout";
-import { Button, Card, Space, Table, Tag, Modal, Divider, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Space,
+  Table,
+  Tag,
+  Modal,
+  Divider,
+  Tooltip,
+  notification,
+} from "antd";
 import cvService from "../../services/cv.service";
 import { useEffect, useState } from "react";
 import { ColumnsType } from "antd/es/table";
@@ -33,7 +43,20 @@ export default function List() {
       title: "Do you want to delete this CV?",
       content: "Once you delete it you will not be able to recover it!",
       async onOk() {
-        await cvService.delete(record.id);
+        cvService.delete(record.id).then((res) => {
+          if (res.data.success) {
+            notification.success({
+              message: "Delete CV Successfully!",
+            });
+            setDataSource(
+              dataSource?.filter((item: any) => item.id !== record.id)
+            );
+          }else{
+            notification.error({
+              message: "Delete CV Failed!",
+            });
+          }
+        });
       },
       onCancel() {},
     });
