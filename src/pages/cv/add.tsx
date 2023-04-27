@@ -1,4 +1,5 @@
 import "./index.css";
+import moment from "moment";
 import {
   Button,
   Col,
@@ -10,13 +11,86 @@ import {
   Select,
   Space,
   Upload,
+  notification,
 } from "antd";
 import MainLayout from "../../components/layout/MainLayout";
 import TextArea from "antd/es/input/TextArea";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import authService from "../../services/auth.service";
+import cvService from "../../services/cv.service";
+import { useNavigate } from "react-router-dom";
 const { RangePicker } = DatePicker;
 
 export default function Add() {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const onFinish = async (values: any) => {
+    setLoading(true);
+    // Prepare values
+    const certifications: [] = values?.certifications?.map((item: any) => {
+      return {
+        time: moment(item.time.toString()).format("YYYY-MM-DD"),
+        name: item.name,
+      };
+    });
+
+    const experince: [] = values?.experince?.map((item: any) => {
+      return {
+        position: item.position,
+        description: item.description,
+        companyName: item.companyName,
+        fromto: [
+          moment(item.fromto[0].toString()).format("YYYY-MM"),
+          moment(item.fromto[1].toString()).format("YYYY-MM"),
+        ],
+      };
+    });
+
+    const projects: [] = values?.projects?.map((item: any) => {
+      return {
+        position: item.position,
+        projectName: item.projectName,
+        fromto: [
+          moment(item.fromto[0].toString()).format("YYYY-MM"),
+          moment(item.fromto[1].toString()).format("YYYY-MM"),
+        ],
+        customer: item.customer,
+        teamSize: item.teamSize,
+        technology: item.technology,
+      };
+    });
+
+    const valuesSubmit = {
+      ...values,
+      certifications,
+      experince,
+      projects,
+      userId: Number((await authService.getUserInfo()).id),
+    };
+
+    // Submit
+    console.log("valuesSubmit", valuesSubmit);
+
+    const result = await cvService.add(valuesSubmit);
+    if (result.data.success) {
+      setLoading(false);
+      notification.success({
+        message: "Saved CV Successfully!",
+      });
+
+      setTimeout(() => {
+        navigate("/my-cv");
+      }, 1500);
+    } else {
+      setLoading(false);
+      notification.error({
+        message: "Save CV Failed!",
+      });
+    }
+  };
+
   return (
     <MainLayout>
       <div className="container">
@@ -24,24 +98,31 @@ export default function Add() {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 24 }}
           layout="horizontal"
+          onFinish={onFinish}
         >
           <Row>
             <Col span={6}>
-              <Form.Item label="Name" name="name" required>
+              <Form.Item
+                label="Name"
+                name="name"
+                required
+                rules={[{ required: true }]}
+              >
                 <Input />
               </Form.Item>
-              <Form.Item label="Job Title" name="jobTitle" required>
+              <Form.Item
+                label="Job Title"
+                name="jobTitle"
+                required
+                rules={[{ required: true }]}
+              >
                 <Input />
               </Form.Item>
               <Form.Item
                 label="Phone"
                 name="phone"
                 required
-                rules={[
-                  {
-                    type: "number",
-                  },
-                ]}
+                rules={[{ required: true }]}
               >
                 <Input />
               </Form.Item>
@@ -52,15 +133,26 @@ export default function Add() {
                 rules={[
                   {
                     type: "email",
+                    required: true,
                   },
                 ]}
               >
                 <Input />
               </Form.Item>
-              <Form.Item label="Address" name="address" required>
+              <Form.Item
+                label="Address"
+                name="address"
+                required
+                rules={[{ required: true }]}
+              >
                 <TextArea autoSize={{ minRows: 2 }}></TextArea>
               </Form.Item>
-              <Form.Item label="Gender">
+              <Form.Item
+                label="Gender"
+                name="gender"
+                required
+                rules={[{ required: true }]}
+              >
                 <Radio.Group>
                   <Radio value="1"> Male </Radio>
                   <Radio value="0"> Female </Radio>
@@ -72,10 +164,10 @@ export default function Add() {
                     <>
                       {fields.map((field) => (
                         <Space key={field.key} align="baseline">
-                          <Form.Item {...field} name={[field.name, "time"]}>
+                          <Form.Item name={[field.name, "time"]}>
                             <DatePicker />
                           </Form.Item>
-                          <Form.Item {...field} name={[field.name, "name"]}>
+                          <Form.Item name={[field.name, "name"]}>
                             <Input placeholder="Name" />
                           </Form.Item>
                           <MinusCircleOutlined
@@ -100,10 +192,20 @@ export default function Add() {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="Objective" name="objective" required>
+              <Form.Item
+                label="Objective"
+                name="objective"
+                required
+                rules={[{ required: true }]}
+              >
                 <TextArea autoSize={{ minRows: 4 }}></TextArea>
               </Form.Item>
-              <Form.Item label="Skills">
+              <Form.Item
+                label="Skills"
+                name="skills"
+                required
+                rules={[{ required: true }]}
+              >
                 <Select mode="tags" dropdownStyle={{ display: "none" }} />
               </Form.Item>
               <Form.Item label="Experince" name="experince">
@@ -111,37 +213,31 @@ export default function Add() {
                   {(fields, { add, remove }) => (
                     <>
                       {fields.map((field) => (
-                        <>
+                        <div key={field.key + "div"}>
                           <Space key={field.key} align="baseline">
-                            <Form.Item
-                              {...field}
-                              name={[field.name, "position"]}
-                            >
+                            <Form.Item name={[field.name, "position"]}>
                               <Input placeholder="Position" />
                             </Form.Item>
-                            <Form.Item
-                              {...field}
-                              name={[field.name, "description"]}
-                            >
+                            <Form.Item name={[field.name, "description"]}>
                               <Input placeholder="Description" />
                             </Form.Item>
-                            <Form.Item
-                              {...field}
-                              name={[field.name, "companyName"]}
-                            >
+                            <Form.Item name={[field.name, "companyName"]}>
                               <Input placeholder="Company Name" />
                             </Form.Item>
                           </Space>
-                          <Space key={field.key} align="baseline">
-                            <Form.Item {...field} name={[field.name, "fromto"]}>
+                          <Space
+                            key={field.key + "victor :)))"}
+                            align="baseline"
+                          >
+                            <Form.Item name={[field.name, "fromto"]}>
                               <RangePicker picker="month" />
                             </Form.Item>
+                            <MinusCircleOutlined
+                              onClick={() => remove(field.name)}
+                              style={{}}
+                            />
                           </Space>
-                          <MinusCircleOutlined
-                            onClick={() => remove(field.name)}
-                            style={{}}
-                          />
-                        </>
+                        </div>
                       ))}
                       <Form.Item>
                         <Button
@@ -164,41 +260,29 @@ export default function Add() {
                   {(fields, { add, remove }) => (
                     <>
                       {fields.map((field) => (
-                        <>
+                        <div key={field.key + "div"}>
                           <Space key={field.key} align="baseline">
-                            <Form.Item
-                              {...field}
-                              name={[field.name, "position"]}
-                            >
+                            <Form.Item name={[field.name, "position"]}>
                               <Input placeholder="Your Position" />
                             </Form.Item>
-                            <Form.Item
-                              {...field}
-                              name={[field.name, "projectName"]}
-                            >
+                            <Form.Item name={[field.name, "projectName"]}>
                               <Input placeholder="Project Name" />
                             </Form.Item>
-                            <Form.Item {...field} name={[field.name, "fromto"]}>
+                            <Form.Item name={[field.name, "fromto"]}>
                               <RangePicker picker="month" />
                             </Form.Item>
                           </Space>
-                          <Space key={field.key} align="baseline">
-                            <Form.Item
-                              {...field}
-                              name={[field.name, "customer"]}
-                            >
+                          <Space
+                            key={field.key + "victor :)))"}
+                            align="baseline"
+                          >
+                            <Form.Item name={[field.name, "customer"]}>
                               <Input placeholder="Customer" />
                             </Form.Item>
-                            <Form.Item
-                              {...field}
-                              name={[field.name, "timeSize"]}
-                            >
+                            <Form.Item name={[field.name, "teamSize"]}>
                               <Input placeholder="Team Size" />
                             </Form.Item>
-                            <Form.Item
-                              {...field}
-                              name={[field.name, "technology"]}
-                            >
+                            <Form.Item name={[field.name, "technology"]}>
                               <Select
                                 mode="tags"
                                 dropdownStyle={{ display: "none" }}
@@ -209,7 +293,7 @@ export default function Add() {
                               style={{}}
                             />
                           </Space>
-                        </>
+                        </div>
                       ))}
                       <Form.Item>
                         <Button
@@ -225,11 +309,17 @@ export default function Add() {
                   )}
                 </Form.List>
               </Form.Item>
-              <Form.Item label="Avatar" valuePropName="fileList">
+              <Form.Item
+                label="Avatar"
+                name="avatar"
+                getValueFromEvent={({ file }) => file.originFileObj}
+                required
+                rules={[{ required: true }]}
+              >
                 <Upload
-                  action="/upload.do"
                   listType="picture-card"
                   maxCount={1}
+                  accept="image/png, image/jpeg"
                 >
                   <div>
                     <PlusOutlined />
@@ -237,8 +327,24 @@ export default function Add() {
                   </div>
                 </Upload>
               </Form.Item>
-              <Form.Item label="Submit">
-                <Button type="primary" style={{right : 0}}>Save</Button>
+              <Form.Item label="Actions">
+                <Button
+                  type="default"
+                  style={{ right: 0 }}
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+                >
+                  Back
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "5px" }}
+                  htmlType="submit"
+                  loading={loading}
+                >
+                  Save
+                </Button>
               </Form.Item>
             </Col>
           </Row>
