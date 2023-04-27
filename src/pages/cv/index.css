@@ -1,3 +1,7 @@
 .anticon-minus-circle{
     padding-left: 10px;
 }
+
+.ant-tooltip-inner {
+    width: 415px;
+  }

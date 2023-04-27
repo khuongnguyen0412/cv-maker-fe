@@ -18,8 +18,8 @@ import TextArea from "antd/es/input/TextArea";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import authService from "../../services/auth.service";
-import cvService from "../../services/cv.service";
 import { useNavigate } from "react-router-dom";
+import cvService from "../../services/cv.service";
 const { RangePicker } = DatePicker;
 
 export default function Add() {
