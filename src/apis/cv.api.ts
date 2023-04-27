@@ -13,6 +13,22 @@ class CvAPI {
       },
     });
   }
+
+  async getAll() {
+    return await axios.get(`${endPoint}/${baseApi}`, {
+      headers: {
+        Authorization: `Bearer ${await authService.getToken()}`,
+      },
+    });
+  }
+
+  async delete(id: number) {
+    return await axios.delete(`${endPoint}/${baseApi}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${await authService.getToken()}`,
+      },
+    });
+  }
 }
 
 export default new CvAPI();
