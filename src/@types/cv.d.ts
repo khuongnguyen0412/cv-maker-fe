@@ -11,6 +11,7 @@ interface ICv {
   experince: IExperince[];
   projects: IProject[];
   avatar: any;
+  path: string;
 }
 
 interface ICertifications {

@@ -46,6 +46,14 @@ class CvAPI {
       },
     });
   }
+
+  async generatePDF(id: number) {
+    return await axios.post(`${endPoint}/${baseApi}/generate-pdf/${id}`, null, {
+      headers: {
+        Authorization: `Bearer ${await authService.getToken()}`,
+      },
+    });
+  }
 }
 
 export default new CvAPI();
