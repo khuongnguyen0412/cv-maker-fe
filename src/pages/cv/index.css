@@ -2,6 +2,6 @@
     padding-left: 10px;
 }
 
-.ant-tooltip-inner {
+.cv-card > .ant-tooltip > .ant-tooltip-content  {
     width: 415px;
   }

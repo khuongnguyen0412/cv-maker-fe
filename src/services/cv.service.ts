@@ -5,8 +5,16 @@ class CvService {
     return await cvApi.add(data);
   }
 
+  async edit(id: number, data: ICv) {
+    return await cvApi.edit(id, data);
+  }
+
   async getAll() {
     return await cvApi.getAll();
+  }
+
+  async getById(id: number) {
+    return await cvApi.getById(id);
   }
 
   async delete(id: number) {
