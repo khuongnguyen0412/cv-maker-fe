@@ -22,12 +22,14 @@ import {
 } from "@ant-design/icons";
 import moment from "moment";
 import Meta from "antd/es/card/Meta";
+import { useNavigate } from "react-router-dom";
 
 const { confirm } = Modal;
 
 export default function List() {
   const [dataSource, setDataSource] = useState<ICv[]>();
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     cvService.getAll().then((res) => {
@@ -51,7 +53,7 @@ export default function List() {
             setDataSource(
               dataSource?.filter((item: any) => item.id !== record.id)
             );
-          }else{
+          } else {
             notification.error({
               message: "Delete CV Failed!",
             });
@@ -82,6 +84,7 @@ export default function List() {
           getPopupContainer={(trigger) => {
             return trigger;
           }}
+          className="cv-card"
           title={
             <Card
               hoverable
@@ -133,7 +136,9 @@ export default function List() {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (record) => (
-        <span key={record}>{moment(record).format("YYYY-MM-DD")}</span>
+        <Tooltip title={moment(record).format("YYYY-MM-DD")}>
+          <span key={record}>{moment(record).fromNow()}</span>
+        </Tooltip>
       ),
     },
     {
@@ -141,7 +146,9 @@ export default function List() {
       dataIndex: "updatedAt",
       key: "updatedAt",
       render: (record) => (
-        <span key={record}>{moment(record).format("YYYY-MM-DD")}</span>
+        <Tooltip title={moment(record).format("YYYY-MM-DD")}>
+          <span key={record}>{moment(record).fromNow()}</span>
+        </Tooltip>
       ),
     },
     {
@@ -156,7 +163,11 @@ export default function List() {
           >
             Download PDF
           </Button>
-          <Button type="primary" icon={<EditOutlined />}>
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
+            onClick={() => navigate(`/my-cv/edit/${record.id}`)}
+          >
             Edit
           </Button>
           <Button
