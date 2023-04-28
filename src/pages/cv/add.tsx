@@ -10,6 +10,7 @@ import {
   Row,
   Select,
   Space,
+  Steps,
   Upload,
   notification,
 } from "antd";
@@ -24,10 +25,12 @@ const { RangePicker } = DatePicker;
 
 export default function Add() {
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState(-1);
   const navigate = useNavigate();
 
   const onFinish = async (values: any) => {
     setLoading(true);
+    setStep(1);
     // Prepare values
     const certifications: [] = values?.certifications?.map((item: any) => {
       return {
@@ -68,7 +71,7 @@ export default function Add() {
       experince,
       projects,
       userId: Number((await authService.getUserInfo()).id),
-      skills: values.skills.toString()
+      skills: values.skills.toString(),
     };
 
     // Submit
@@ -76,19 +79,32 @@ export default function Add() {
 
     const result = await cvService.add(valuesSubmit);
     if (result.data.success) {
+      setStep(1);
       setLoading(false);
       notification.success({
         message: "Saved CV Successfully!",
       });
 
-      setTimeout(() => {
-        navigate("/my-cv");
-      }, 1500);
-    } else {
-      setLoading(false);
-      notification.error({
-        message: "Save CV Failed!",
-      });
+      const generatePDFRes = await cvService.generatePDF(
+        Number(result.data.data.id)
+      );
+      if (generatePDFRes.data.success) {
+        setLoading(false);
+        setStep(2);
+        notification.success({
+          message: "Generate PDF Successfully!",
+        });
+
+        setTimeout(() => {
+          navigate("/my-cv");
+        }, 2000);
+      } else {
+        setLoading(false);
+        setStep(0);
+        notification.error({
+          message: "Save CV Failed!",
+        });
+      }
     }
   };
 
@@ -327,6 +343,25 @@ export default function Add() {
                     <div style={{ marginTop: 8 }}>Upload</div>
                   </div>
                 </Upload>
+              </Form.Item>
+              <Form.Item label="Process">
+                <Steps
+                  current={step}
+                  status="process"
+                  items={[
+                    {
+                      title: "Save",
+                      description: "Saving into DB...",
+                    },
+                    {
+                      title: "Generate PDF",
+                      description: "Generating PDF File...",
+                    },
+                    {
+                      title: "Done",
+                    },
+                  ]}
+                />
               </Form.Item>
               <Form.Item label="Actions">
                 <Button

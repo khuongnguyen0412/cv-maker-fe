@@ -13,6 +13,7 @@ import {
   Row,
   Select,
   Space,
+  Steps,
   Upload,
   notification,
 } from "antd";
@@ -27,6 +28,7 @@ const { RangePicker } = DatePicker;
 
 export default function Edit() {
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState(-1);
   const navigate = useNavigate();
   const { id } = useParams();
   const [form] = Form.useForm();
@@ -81,6 +83,7 @@ export default function Edit() {
 
   const onFinish = async (values: any) => {
     setLoading(true);
+    setStep(0);
     // Prepare values
     const certifications: [] = values?.certifications?.map((item: any) => {
       return {
@@ -130,16 +133,29 @@ export default function Edit() {
 
     const result = await cvService.edit(Number(id), valuesSubmit);
     if (result.data.success) {
+      setStep(1);
       setLoading(false);
       notification.success({
         message: "Saved CV Successfully!",
       });
 
-      setTimeout(() => {
-        navigate("/my-cv");
-      }, 1500);
+      const generatePDFRes = await cvService.generatePDF(Number(id));
+      if (generatePDFRes.data.success) {
+        setLoading(false);
+        setStep(2);
+        notification.success({
+          message: "Generate PDF Successfully!",
+        });
+
+        setTimeout(() => {
+          navigate("/my-cv");
+        }, 2000);
+      } else {
+        setLoading(false);
+      }
     } else {
       setLoading(false);
+      setStep(0);
       notification.error({
         message: "Save CV Failed!",
       });
@@ -387,6 +403,25 @@ export default function Edit() {
                     <div style={{ marginTop: 8 }}>Upload</div>
                   </div>
                 </Upload>
+              </Form.Item>
+              <Form.Item label="Process">
+                <Steps
+                  current={step}
+                  status="process"
+                  items={[
+                    {
+                      title: "Save",
+                      description: "Saving into DB...",
+                    },
+                    {
+                      title: "Generate PDF",
+                      description: "Generating PDF File...",
+                    },
+                    {
+                      title: "Done",
+                    },
+                  ]}
+                />
               </Form.Item>
               <Form.Item label="Actions">
                 <Button
