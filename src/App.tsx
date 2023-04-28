@@ -5,6 +5,7 @@ import Login from "./pages/login";
 import { RequireAuth } from "./guards/RequireAuth";
 import Add from "./pages/cv/add";
 import List from "./pages/cv/list";
+import Edit from "./pages/cv/edit";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/login" element=<Login /> />
         <Route path="/my-cv" element=<List /> />
         <Route path="/my-cv/add" element=<Add /> />
+        <Route path="/my-cv/edit/:id" element=<Edit /> />
       </Routes>
     </Router>
   );
