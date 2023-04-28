@@ -20,6 +20,10 @@ class CvService {
   async delete(id: number) {
     return await cvApi.delete(id);
   }
+
+  async generatePDF(id: number) {
+    return await cvApi.generatePDF(id);
+  }
 }
 
 export default new CvService();
