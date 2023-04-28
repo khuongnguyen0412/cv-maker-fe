@@ -19,6 +19,7 @@ import {
   DeleteOutlined,
   DownloadOutlined,
   FilePdfOutlined,
+  FileSyncOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import Meta from "antd/es/card/Meta";
@@ -29,16 +30,21 @@ const { confirm } = Modal;
 export default function List() {
   const [dataSource, setDataSource] = useState<ICv[]>();
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    cvService.getAll().then((res) => {
+    fetchData().then((res) => {
       setTimeout(() => {
         setDataSource(res.data.data.list);
         setLoading(false);
       }, 500);
     });
   }, []);
+
+  const fetchData = () => {
+    return cvService.getAll();
+  };
 
   const handleDelete = (record: any) => {
     confirm({
@@ -61,6 +67,27 @@ export default function List() {
         });
       },
       onCancel() {},
+    });
+  };
+
+  const handleGeneratePDF = (id: number) => {
+    setGenerating(true);
+    cvService.generatePDF(id).then((res) => {
+      if (res.data.success) {
+        notification.success({
+          message: "Generate PDF Successfully!",
+        });
+        setLoading(true);
+        fetchData().then((res) => {
+          setDataSource(res.data.data.list);
+          setLoading(false);
+        });
+        setGenerating(false);
+      } else {
+        notification.error({
+          message: "Generate PDF Failed!",
+        });
+      }
     });
   };
 
@@ -157,12 +184,24 @@ export default function List() {
       render: (_: any, record: any) => (
         <Space size="middle" key={_}>
           <Button icon={<FilePdfOutlined />}>View</Button>
-          <Button
-            icon={<DownloadOutlined />}
-            style={{ backgroundColor: "green", color: "white" }}
-          >
-            Download PDF
-          </Button>
+          {record.path ? (
+            <Button
+              icon={<DownloadOutlined />}
+              style={{ backgroundColor: "green", color: "white" }}
+              onClick={() => window.open(record.path, "_blank")}
+            >
+              Download PDF
+            </Button>
+          ) : (
+            <Button
+              icon={<FileSyncOutlined />}
+              style={{ backgroundColor: "green", color: "white" }}
+              onClick={() => handleGeneratePDF(record.id)}
+              loading={generating}
+            >
+              Generate PDF
+            </Button>
+          )}
           <Button
             type="primary"
             icon={<EditOutlined />}
