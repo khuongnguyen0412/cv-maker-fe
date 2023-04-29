@@ -54,6 +54,20 @@ class CvAPI {
       },
     });
   }
+
+  async downloadPDF(key: string) {
+    return await axios.post(
+      `${endPoint}/${baseApi}/download-pdf`,
+      {
+        key,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${await authService.getToken()}`,
+        },
+      }
+    );
+  }
 }
 
 export default new CvAPI();
