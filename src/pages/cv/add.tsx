@@ -2,6 +2,7 @@ import "./index.css";
 import moment from "moment";
 import {
   Button,
+  Card,
   Col,
   DatePicker,
   Form,
@@ -11,26 +12,41 @@ import {
   Select,
   Space,
   Steps,
+  Tooltip,
   Upload,
   notification,
 } from "antd";
 import MainLayout from "../../components/layout/MainLayout";
 import TextArea from "antd/es/input/TextArea";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import authService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
 import cvService from "../../services/cv.service";
+import Meta from "antd/es/card/Meta";
+import templateService from "../../services/template.service";
 const { RangePicker } = DatePicker;
 
 export default function Add() {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(-1);
   const navigate = useNavigate();
+  const [templates, setTemplates] = useState<[]>();
+
+  useEffect(() => {
+    templateService.getAll().then((res) => {
+      if (res.data.success) {
+        setTemplates(res.data.data.list);
+      } else {
+        notification.error({
+          message: "Load template failed!",
+        });
+      }
+    });
+  }, []);
 
   const onFinish = async (values: any) => {
     setLoading(true);
-    setStep(1);
     // Prepare values
     const certifications: [] = values?.certifications?.map((item: any) => {
       return {
@@ -76,6 +92,7 @@ export default function Add() {
 
     // Submit
     console.log("valuesSubmit", valuesSubmit);
+    setStep(0);
 
     const result = await cvService.add(valuesSubmit);
     if (result.data.success) {
@@ -181,10 +198,16 @@ export default function Add() {
                     <>
                       {fields.map((field) => (
                         <Space key={field.key} align="baseline">
-                          <Form.Item name={[field.name, "time"]}>
+                          <Form.Item
+                            name={[field.name, "time"]}
+                            rules={[{ required: true }]}
+                          >
                             <DatePicker />
                           </Form.Item>
-                          <Form.Item name={[field.name, "name"]}>
+                          <Form.Item
+                            name={[field.name, "name"]}
+                            rules={[{ required: true }]}
+                          >
                             <Input placeholder="Name" />
                           </Form.Item>
                           <MinusCircleOutlined
@@ -232,13 +255,22 @@ export default function Add() {
                       {fields.map((field) => (
                         <div key={field.key + "div"}>
                           <Space key={field.key} align="baseline">
-                            <Form.Item name={[field.name, "position"]}>
+                            <Form.Item
+                              name={[field.name, "position"]}
+                              rules={[{ required: true }]}
+                            >
                               <Input placeholder="Position" />
                             </Form.Item>
-                            <Form.Item name={[field.name, "description"]}>
+                            <Form.Item
+                              name={[field.name, "description"]}
+                              rules={[{ required: true }]}
+                            >
                               <Input placeholder="Description" />
                             </Form.Item>
-                            <Form.Item name={[field.name, "companyName"]}>
+                            <Form.Item
+                              name={[field.name, "companyName"]}
+                              rules={[{ required: true }]}
+                            >
                               <Input placeholder="Company Name" />
                             </Form.Item>
                           </Space>
@@ -246,7 +278,10 @@ export default function Add() {
                             key={field.key + "victor :)))"}
                             align="baseline"
                           >
-                            <Form.Item name={[field.name, "fromto"]}>
+                            <Form.Item
+                              name={[field.name, "fromto"]}
+                              rules={[{ required: true }]}
+                            >
                               <RangePicker picker="month" />
                             </Form.Item>
                             <MinusCircleOutlined
@@ -279,13 +314,22 @@ export default function Add() {
                       {fields.map((field) => (
                         <div key={field.key + "div"}>
                           <Space key={field.key} align="baseline">
-                            <Form.Item name={[field.name, "position"]}>
+                            <Form.Item
+                              name={[field.name, "position"]}
+                              rules={[{ required: true }]}
+                            >
                               <Input placeholder="Your Position" />
                             </Form.Item>
-                            <Form.Item name={[field.name, "projectName"]}>
+                            <Form.Item
+                              name={[field.name, "projectName"]}
+                              rules={[{ required: true }]}
+                            >
                               <Input placeholder="Project Name" />
                             </Form.Item>
-                            <Form.Item name={[field.name, "fromto"]}>
+                            <Form.Item
+                              name={[field.name, "fromto"]}
+                              rules={[{ required: true }]}
+                            >
                               <RangePicker picker="month" />
                             </Form.Item>
                           </Space>
@@ -293,13 +337,22 @@ export default function Add() {
                             key={field.key + "victor :)))"}
                             align="baseline"
                           >
-                            <Form.Item name={[field.name, "customer"]}>
+                            <Form.Item
+                              name={[field.name, "customer"]}
+                              rules={[{ required: true }]}
+                            >
                               <Input placeholder="Customer" />
                             </Form.Item>
-                            <Form.Item name={[field.name, "teamSize"]}>
+                            <Form.Item
+                              name={[field.name, "teamSize"]}
+                              rules={[{ required: true }]}
+                            >
                               <Input placeholder="Team Size" />
                             </Form.Item>
-                            <Form.Item name={[field.name, "technology"]}>
+                            <Form.Item
+                              name={[field.name, "technology"]}
+                              rules={[{ required: true }]}
+                            >
                               <Select
                                 mode="tags"
                                 dropdownStyle={{ display: "none" }}
@@ -344,6 +397,48 @@ export default function Add() {
                   </div>
                 </Upload>
               </Form.Item>
+              <Form.Item
+                label="Templates"
+                name="templateId"
+                rules={[{ required: true }]}
+              >
+                <Radio.Group className="templates">
+                  {templates?.map((template: ITemplate) => {
+                    return (
+                      <Radio value={template.id} key={template.id}>
+                        <Tooltip
+                          className="template-card"
+                          getPopupContainer={(trigger) => {
+                            return trigger;
+                          }}
+                          title={
+                            <Card
+                              hoverable
+                              style={{ width: 300 }}
+                              cover={
+                                <img alt={template.name} src={template.image} />
+                              }
+                            >
+                              <Meta title={template.name} />
+                            </Card>
+                          }
+                          placement="right"
+                        >
+                          <Card
+                            hoverable
+                            style={{ width: 120, height: 220 }}
+                            cover={
+                              <img alt={template.name} src={template.image} />
+                            }
+                          >
+                            <Meta title={template.name} />
+                          </Card>
+                        </Tooltip>
+                      </Radio>
+                    );
+                  })}
+                </Radio.Group>
+              </Form.Item>
               <Form.Item label="Process">
                 <Steps
                   current={step}
@@ -351,11 +446,9 @@ export default function Add() {
                   items={[
                     {
                       title: "Save",
-                      description: "Saving into DB...",
                     },
                     {
                       title: "Generate PDF",
-                      description: "Generating PDF File...",
                     },
                     {
                       title: "Done",
