@@ -35,10 +35,8 @@ export default function List() {
 
   useEffect(() => {
     fetchData().then((res) => {
-      setTimeout(() => {
-        setDataSource(res.data.data.list);
-        setLoading(false);
-      }, 500);
+      setDataSource(res.data.data.list);
+      setLoading(false);
     });
   }, []);
 
@@ -67,27 +65,6 @@ export default function List() {
         });
       },
       onCancel() {},
-    });
-  };
-
-  const handleGeneratePDF = (id: number) => {
-    setGenerating(true);
-    cvService.generatePDF(id).then((res) => {
-      if (res.data.success) {
-        notification.success({
-          message: "Generate PDF Successfully!",
-        });
-        setLoading(true);
-        fetchData().then((res) => {
-          setDataSource(res.data.data.list);
-          setLoading(false);
-        });
-        setGenerating(false);
-      } else {
-        notification.error({
-          message: "Generate PDF Failed!",
-        });
-      }
     });
   };
 
@@ -184,7 +161,6 @@ export default function List() {
       render: (_: any, record: any) => (
         <Space size="middle" key={_}>
           <Button icon={<FilePdfOutlined />}>View</Button>
-          {record.path ? (
             <Button
               icon={<DownloadOutlined />}
               style={{ backgroundColor: "green", color: "white" }}
@@ -192,16 +168,6 @@ export default function List() {
             >
               Download PDF
             </Button>
-          ) : (
-            <Button
-              icon={<FileSyncOutlined />}
-              style={{ backgroundColor: "green", color: "white" }}
-              onClick={() => handleGeneratePDF(record.id)}
-              loading={generating}
-            >
-              Generate PDF
-            </Button>
-          )}
           <Button
             type="primary"
             icon={<EditOutlined />}

@@ -5,3 +5,15 @@
 .cv-card > .ant-tooltip > .ant-tooltip-content  {
     width: 415px;
   }
+
+  .template-card > .ant-tooltip > .ant-tooltip-content  {
+    width: 315px;
+  }
+
+  .templates {
+    display: flex;
+  }
+
+  .ant-card-meta-title{
+    text-align: center;
+  }

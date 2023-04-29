@@ -12,6 +12,7 @@ interface ICv {
   projects: IProject[];
   avatar: any;
   path: string;
+  templateId: number;
 }
 
 interface ICertifications {
