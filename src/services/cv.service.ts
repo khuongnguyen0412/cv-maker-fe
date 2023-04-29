@@ -24,6 +24,10 @@ class CvService {
   async generatePDF(id: number) {
     return await cvApi.generatePDF(id);
   }
+
+  async downloadPDF(key: string) {
+    return await cvApi.downloadPDF(key);
+  }
 }
 
 export default new CvService();

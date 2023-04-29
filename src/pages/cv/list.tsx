@@ -19,7 +19,6 @@ import {
   DeleteOutlined,
   DownloadOutlined,
   FilePdfOutlined,
-  FileSyncOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import Meta from "antd/es/card/Meta";
@@ -66,6 +65,17 @@ export default function List() {
       },
       onCancel() {},
     });
+  };
+
+  const handleDownloadPDF = async (key: string) => {
+    const res = await cvService.downloadPDF(key);
+    if (res.data.success) {
+      window.open(res.data.data.url);
+    } else {
+      notification.error({
+        message: "Download PDF Failed!",
+      });
+    }
   };
 
   const columns: ColumnsType<ICv> = [
@@ -161,13 +171,13 @@ export default function List() {
       render: (_: any, record: any) => (
         <Space size="middle" key={_}>
           <Button icon={<FilePdfOutlined />}>View</Button>
-            <Button
-              icon={<DownloadOutlined />}
-              style={{ backgroundColor: "green", color: "white" }}
-              onClick={() => window.open(record.path, "_blank")}
-            >
-              Download PDF
-            </Button>
+          <Button
+            icon={<DownloadOutlined />}
+            style={{ backgroundColor: "green", color: "white" }}
+            onClick={async () => await handleDownloadPDF(record.path)}
+          >
+            Download PDF
+          </Button>
           <Button
             type="primary"
             icon={<EditOutlined />}
