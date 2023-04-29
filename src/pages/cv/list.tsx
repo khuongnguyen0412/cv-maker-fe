@@ -2,7 +2,6 @@ import "./index.css";
 import MainLayout from "../../components/layout/MainLayout";
 import {
   Button,
-  Card,
   Space,
   Table,
   Tag,
@@ -18,7 +17,6 @@ import {
   EditOutlined,
   DeleteOutlined,
   DownloadOutlined,
-  FilePdfOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
 import Meta from "antd/es/card/Meta";
@@ -89,52 +87,16 @@ export default function List() {
       },
     },
     {
-      title: "CV",
-      dataIndex: "avatar",
-      key: "avatar",
-      render: (record, { name, email }) => (
-        <Tooltip
-          placement="right"
-          getPopupContainer={(trigger) => {
-            return trigger;
-          }}
-          className="cv-card"
-          title={
-            <Card
-              hoverable
-              style={{ width: 400 }}
-              cover={
-                <img
-                  alt="example"
-                  src="https://www.resumemeet.com/images/cv_maker_online_01.jpg"
-                />
-              }
-              key={record}
-            >
-              <Meta title={name} description={email} />
-            </Card>
-          }
-        >
-          <Card
-            hoverable
-            style={{ width: 180, height: 280 }}
-            cover={
-              <img
-                alt="example"
-                src="https://www.resumemeet.com/images/cv_maker_online_01.jpg"
-              />
-            }
-            key={record}
-          >
-            <Meta title={name} />
-          </Card>
-        </Tooltip>
-      ),
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      render: (record) => <span>{record}</span>,
     },
     {
       title: "Skills",
       dataIndex: "skills",
       key: "skills",
+      width:'200px',
       render: (_, { skills }) => {
         return skills.map((skill: any) => {
           return (
@@ -170,7 +132,6 @@ export default function List() {
       key: "action",
       render: (_: any, record: any) => (
         <Space size="middle" key={_}>
-          <Button icon={<FilePdfOutlined />}>View</Button>
           <Button
             icon={<DownloadOutlined />}
             style={{ backgroundColor: "green", color: "white" }}
