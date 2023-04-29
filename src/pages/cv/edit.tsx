@@ -14,6 +14,7 @@ import {
   Select,
   Space,
   Steps,
+  Tooltip,
   Upload,
   notification,
 } from "antd";
@@ -24,6 +25,8 @@ import { useEffect, useState } from "react";
 import authService from "../../services/auth.service";
 import { useNavigate, useParams } from "react-router-dom";
 import cvService from "../../services/cv.service";
+import templateService from "../../services/template.service";
+import Meta from "antd/es/card/Meta";
 const { RangePicker } = DatePicker;
 
 export default function Edit() {
@@ -32,6 +35,19 @@ export default function Edit() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [form] = Form.useForm();
+  const [templates, setTemplates] = useState<[]>();
+
+  useEffect(() => {
+    templateService.getAll().then((res) => {
+      if (res.data.success) {
+        setTemplates(res.data.data.list);
+      } else {
+        notification.error({
+          message: "Load template failed!",
+        });
+      }
+    });
+  }, []);
 
   useEffect(() => {
     cvService.getById(Number(id)).then((res: any) => {
@@ -83,7 +99,6 @@ export default function Edit() {
 
   const onFinish = async (values: any) => {
     setLoading(true);
-    setStep(0);
     // Prepare values
     const certifications: [] = values?.certifications?.map((item: any) => {
       return {
@@ -130,13 +145,17 @@ export default function Edit() {
 
     // Submit
     console.log("valuesSubmit", valuesSubmit);
+    setStep(0);
 
     const result = await cvService.edit(Number(id), valuesSubmit);
     if (result.data.success) {
       setStep(1);
-      setLoading(false);
       notification.success({
         message: "Saved CV Successfully!",
+      });
+
+      notification.info({
+        message: "Generating PDF!",
       });
 
       const generatePDFRes = await cvService.generatePDF(Number(id));
@@ -227,7 +246,6 @@ export default function Edit() {
                 name="gender"
                 required
                 rules={[{ required: true }]}
-                // valuePropName="value"
               >
                 <Radio.Group>
                   <Radio value="1"> Male </Radio>
@@ -404,6 +422,48 @@ export default function Edit() {
                   </div>
                 </Upload>
               </Form.Item>
+              <Form.Item
+                label="Templates"
+                name="templateId"
+                rules={[{ required: true }]}
+              >
+                <Radio.Group className="templates">
+                  {templates?.map((template: ITemplate) => {
+                    return (
+                      <Radio value={template.id} key={template.id}>
+                        <Tooltip
+                          className="template-card"
+                          getPopupContainer={(trigger) => {
+                            return trigger;
+                          }}
+                          title={
+                            <Card
+                              hoverable
+                              style={{ width: 300 }}
+                              cover={
+                                <img alt={template.name} src={template.image} />
+                              }
+                            >
+                              <Meta title={template.name} />
+                            </Card>
+                          }
+                          placement="right"
+                        >
+                          <Card
+                            hoverable
+                            style={{ width: 120, height: 220 }}
+                            cover={
+                              <img alt={template.name} src={template.image} />
+                            }
+                          >
+                            <Meta title={template.name} />
+                          </Card>
+                        </Tooltip>
+                      </Radio>
+                    );
+                  })}
+                </Radio.Group>
+              </Form.Item>
               <Form.Item label="Process">
                 <Steps
                   current={step}
@@ -411,11 +471,9 @@ export default function Edit() {
                   items={[
                     {
                       title: "Save",
-                      description: "Saving into DB...",
                     },
                     {
                       title: "Generate PDF",
-                      description: "Generating PDF File...",
                     },
                     {
                       title: "Done",
