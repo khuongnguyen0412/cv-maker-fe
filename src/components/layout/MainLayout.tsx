@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Layout, theme } from "antd";
 import "../../App.css";
 import LogoComponent from "../logo/LogoComponent";
@@ -37,6 +37,7 @@ function MainLayout(props: any) {
           }}
         >
           {props?.children}
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

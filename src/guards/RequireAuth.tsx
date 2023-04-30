@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router";
-import authService from "../services/auth.service";
+import { Navigate } from "react-router-dom";
 
 export const RequireAuth = ({ children, ...rest }: any) => {
   const [isAdmin, setIsAdmin] = useState(-1);

@@ -182,328 +182,320 @@ export default function Edit() {
   };
 
   return (
-    <MainLayout>
-      <div className="container">
-        <Form
-          labelCol={{ span: 4 }}
-          wrapperCol={{ span: 24 }}
-          layout="horizontal"
-          onFinish={onFinish}
-          form={form}
-          initialValues={{
-            gender: true,
-          }}
-        >
-          <Row>
-            <Col span={6}>
-              <Form.Item
-                label="Name"
-                name="name"
-                required
-                rules={[{ required: true }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Job Title"
-                name="jobTitle"
-                required
-                rules={[{ required: true }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Phone"
-                name="phone"
-                required
-                rules={[{ required: true }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Email"
-                name="email"
-                required
-                rules={[
-                  {
-                    type: "email",
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Address"
-                name="address"
-                required
-                rules={[{ required: true }]}
-              >
-                <TextArea autoSize={{ minRows: 2 }}></TextArea>
-              </Form.Item>
-              <Form.Item
-                label="Gender"
-                name="gender"
-                required
-                rules={[{ required: true }]}
-              >
-                <Radio.Group>
-                  <Radio value="1"> Male </Radio>
-                  <Radio value="0"> Female </Radio>
-                </Radio.Group>
-              </Form.Item>
-              <Form.Item label="Certifications" name="certifications">
-                <Form.List name="certifications">
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map((field) => (
+    <div className="container">
+      <Form
+        labelCol={{ span: 4 }}
+        wrapperCol={{ span: 24 }}
+        layout="horizontal"
+        onFinish={onFinish}
+        form={form}
+        initialValues={{
+          gender: true,
+        }}
+      >
+        <Row>
+          <Col span={6}>
+            <Form.Item
+              label="Name"
+              name="name"
+              required
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Job Title"
+              name="jobTitle"
+              required
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Phone"
+              name="phone"
+              required
+              rules={[{ required: true }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Email"
+              name="email"
+              required
+              rules={[
+                {
+                  type: "email",
+                  required: true,
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Address"
+              name="address"
+              required
+              rules={[{ required: true }]}
+            >
+              <TextArea autoSize={{ minRows: 2 }}></TextArea>
+            </Form.Item>
+            <Form.Item
+              label="Gender"
+              name="gender"
+              required
+              rules={[{ required: true }]}
+            >
+              <Radio.Group>
+                <Radio value="1"> Male </Radio>
+                <Radio value="0"> Female </Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item label="Certifications" name="certifications">
+              <Form.List name="certifications">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map((field) => (
+                      <Space key={field.key} align="baseline">
+                        <Form.Item name={[field.name, "time"]}>
+                          <DatePicker />
+                        </Form.Item>
+                        <Form.Item name={[field.name, "name"]}>
+                          <Input placeholder="Name" />
+                        </Form.Item>
+                        <MinusCircleOutlined
+                          onClick={() => remove(field.name)}
+                          style={{}}
+                        />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={add}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add item
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label="Objective"
+              name="objective"
+              required
+              rules={[{ required: true }]}
+            >
+              <TextArea autoSize={{ minRows: 4 }}></TextArea>
+            </Form.Item>
+            <Form.Item
+              label="Skills"
+              name="skills"
+              required
+              rules={[{ required: true }]}
+            >
+              <Select mode="tags" dropdownStyle={{ display: "none" }} />
+            </Form.Item>
+            <Form.Item label="Experince" name="experince">
+              <Form.List name="experince">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map((field) => (
+                      <div key={field.key + "div"}>
                         <Space key={field.key} align="baseline">
-                          <Form.Item name={[field.name, "time"]}>
-                            <DatePicker />
+                          <Form.Item name={[field.name, "position"]}>
+                            <Input placeholder="Position" />
                           </Form.Item>
-                          <Form.Item name={[field.name, "name"]}>
-                            <Input placeholder="Name" />
+                          <Form.Item name={[field.name, "description"]}>
+                            <Input placeholder="Description" />
+                          </Form.Item>
+                          <Form.Item name={[field.name, "companyName"]}>
+                            <Input placeholder="Company Name" />
+                          </Form.Item>
+                        </Space>
+                        <Space key={field.key + "victor :)))"} align="baseline">
+                          <Form.Item name={[field.name, "fromto"]}>
+                            <RangePicker picker="month" />
                           </Form.Item>
                           <MinusCircleOutlined
                             onClick={() => remove(field.name)}
                             style={{}}
                           />
                         </Space>
-                      ))}
-                      <Form.Item>
-                        <Button
-                          type="dashed"
-                          onClick={add}
-                          block
-                          icon={<PlusOutlined />}
-                        >
-                          Add item
-                        </Button>
-                      </Form.Item>
-                    </>
-                  )}
-                </Form.List>
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                label="Objective"
-                name="objective"
-                required
-                rules={[{ required: true }]}
-              >
-                <TextArea autoSize={{ minRows: 4 }}></TextArea>
-              </Form.Item>
-              <Form.Item
-                label="Skills"
-                name="skills"
-                required
-                rules={[{ required: true }]}
-              >
-                <Select mode="tags" dropdownStyle={{ display: "none" }} />
-              </Form.Item>
-              <Form.Item label="Experince" name="experince">
-                <Form.List name="experince">
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map((field) => (
-                        <div key={field.key + "div"}>
-                          <Space key={field.key} align="baseline">
-                            <Form.Item name={[field.name, "position"]}>
-                              <Input placeholder="Position" />
-                            </Form.Item>
-                            <Form.Item name={[field.name, "description"]}>
-                              <Input placeholder="Description" />
-                            </Form.Item>
-                            <Form.Item name={[field.name, "companyName"]}>
-                              <Input placeholder="Company Name" />
-                            </Form.Item>
-                          </Space>
-                          <Space
-                            key={field.key + "victor :)))"}
-                            align="baseline"
-                          >
-                            <Form.Item name={[field.name, "fromto"]}>
-                              <RangePicker picker="month" />
-                            </Form.Item>
-                            <MinusCircleOutlined
-                              onClick={() => remove(field.name)}
-                              style={{}}
+                      </div>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={add}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add item
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
+          </Col>
+          <Col span={10}>
+            <Form.Item label="Projects" name="projects">
+              <Form.List name="projects">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map((field) => (
+                      <div key={field.key + "div"}>
+                        <Space key={field.key} align="baseline">
+                          <Form.Item name={[field.name, "position"]}>
+                            <Input placeholder="Your Position" />
+                          </Form.Item>
+                          <Form.Item name={[field.name, "projectName"]}>
+                            <Input placeholder="Project Name" />
+                          </Form.Item>
+                          <Form.Item name={[field.name, "fromto"]}>
+                            <RangePicker picker="month" />
+                          </Form.Item>
+                        </Space>
+                        <Space key={field.key + "victor :)))"} align="baseline">
+                          <Form.Item name={[field.name, "customer"]}>
+                            <Input placeholder="Customer" />
+                          </Form.Item>
+                          <Form.Item name={[field.name, "teamSize"]}>
+                            <Input placeholder="Team Size" />
+                          </Form.Item>
+                          <Form.Item name={[field.name, "technology"]}>
+                            <Select
+                              mode="tags"
+                              dropdownStyle={{ display: "none" }}
                             />
-                          </Space>
-                        </div>
-                      ))}
-                      <Form.Item>
-                        <Button
-                          type="dashed"
-                          onClick={add}
-                          block
-                          icon={<PlusOutlined />}
-                        >
-                          Add item
-                        </Button>
-                      </Form.Item>
-                    </>
-                  )}
-                </Form.List>
-              </Form.Item>
-            </Col>
-            <Col span={10}>
-              <Form.Item label="Projects" name="projects">
-                <Form.List name="projects">
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map((field) => (
-                        <div key={field.key + "div"}>
-                          <Space key={field.key} align="baseline">
-                            <Form.Item name={[field.name, "position"]}>
-                              <Input placeholder="Your Position" />
-                            </Form.Item>
-                            <Form.Item name={[field.name, "projectName"]}>
-                              <Input placeholder="Project Name" />
-                            </Form.Item>
-                            <Form.Item name={[field.name, "fromto"]}>
-                              <RangePicker picker="month" />
-                            </Form.Item>
-                          </Space>
-                          <Space
-                            key={field.key + "victor :)))"}
-                            align="baseline"
-                          >
-                            <Form.Item name={[field.name, "customer"]}>
-                              <Input placeholder="Customer" />
-                            </Form.Item>
-                            <Form.Item name={[field.name, "teamSize"]}>
-                              <Input placeholder="Team Size" />
-                            </Form.Item>
-                            <Form.Item name={[field.name, "technology"]}>
-                              <Select
-                                mode="tags"
-                                dropdownStyle={{ display: "none" }}
-                              />
-                            </Form.Item>
-                            <MinusCircleOutlined
-                              onClick={() => remove(field.name)}
-                              style={{}}
-                            />
-                          </Space>
-                        </div>
-                      ))}
-                      <Form.Item>
-                        <Button
-                          type="dashed"
-                          onClick={add}
-                          block
-                          icon={<PlusOutlined />}
-                        >
-                          Add item
-                        </Button>
-                      </Form.Item>
-                    </>
-                  )}
-                </Form.List>
-              </Form.Item>
-              <Form.Item label="Avatar" name="avatar" valuePropName="src">
-                <Avatar shape="square" size={164} />
-              </Form.Item>
-              <Form.Item
-                label="Avatar Update"
-                name="avatarNew"
-                getValueFromEvent={({ file }) => file.originFileObj}
+                          </Form.Item>
+                          <MinusCircleOutlined
+                            onClick={() => remove(field.name)}
+                            style={{}}
+                          />
+                        </Space>
+                      </div>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={add}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add item
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
+            <Form.Item label="Avatar" name="avatar" valuePropName="src">
+              <Avatar shape="square" size={164} />
+            </Form.Item>
+            <Form.Item
+              label="Avatar Update"
+              name="avatarNew"
+              getValueFromEvent={({ file }) => file.originFileObj}
+            >
+              <Upload
+                listType="picture-card"
+                maxCount={1}
+                accept="image/png, image/jpeg"
               >
-                <Upload
-                  listType="picture-card"
-                  maxCount={1}
-                  accept="image/png, image/jpeg"
-                >
-                  <div>
-                    <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>Upload</div>
-                  </div>
-                </Upload>
-              </Form.Item>
-              <Form.Item
-                label="Templates"
-                name="templateId"
-                rules={[{ required: true }]}
-              >
-                <Radio.Group className="templates">
-                  {templates?.map((template: ITemplate) => {
-                    return (
-                      <Radio value={template.id} key={template.id}>
-                        <Tooltip
-                          className="template-card"
-                          getPopupContainer={(trigger) => {
-                            return trigger;
-                          }}
-                          title={
-                            <Card
-                              hoverable
-                              style={{ width: 300 }}
-                              cover={
-                                <img alt={template.name} src={template.image} />
-                              }
-                            >
-                              <Meta title={template.name} />
-                            </Card>
-                          }
-                          placement="right"
-                        >
+                <div>
+                  <PlusOutlined />
+                  <div style={{ marginTop: 8 }}>Upload</div>
+                </div>
+              </Upload>
+            </Form.Item>
+            <Form.Item
+              label="Templates"
+              name="templateId"
+              rules={[{ required: true }]}
+            >
+              <Radio.Group className="templates">
+                {templates?.map((template: ITemplate) => {
+                  return (
+                    <Radio value={template.id} key={template.id}>
+                      <Tooltip
+                        className="template-card"
+                        getPopupContainer={(trigger) => {
+                          return trigger;
+                        }}
+                        title={
                           <Card
                             hoverable
-                            style={{ width: 120, height: 220 }}
+                            style={{ width: 300 }}
                             cover={
                               <img alt={template.name} src={template.image} />
                             }
                           >
                             <Meta title={template.name} />
                           </Card>
-                        </Tooltip>
-                      </Radio>
-                    );
-                  })}
-                </Radio.Group>
-              </Form.Item>
-              <Form.Item label="Process">
-                <Steps
-                  current={step}
-                  status="process"
-                  items={[
-                    {
-                      title: "Save",
-                    },
-                    {
-                      title: "Generate PDF",
-                    },
-                    {
-                      title: "Done",
-                    },
-                  ]}
-                />
-              </Form.Item>
-              <Form.Item label="Actions">
-                <Button
-                  type="default"
-                  style={{ right: 0 }}
-                  onClick={() => {
-                    navigate(-1);
-                  }}
-                >
-                  Back
-                </Button>
-                <Button
-                  type="primary"
-                  style={{ marginLeft: "5px" }}
-                  htmlType="submit"
-                  loading={loading}
-                >
-                  Save
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-      </div>
-    </MainLayout>
+                        }
+                        placement="right"
+                      >
+                        <Card
+                          hoverable
+                          style={{ width: 120, height: 220 }}
+                          cover={
+                            <img alt={template.name} src={template.image} />
+                          }
+                        >
+                          <Meta title={template.name} />
+                        </Card>
+                      </Tooltip>
+                    </Radio>
+                  );
+                })}
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item label="Process">
+              <Steps
+                current={step}
+                status="process"
+                items={[
+                  {
+                    title: "Save",
+                  },
+                  {
+                    title: "Generate PDF",
+                  },
+                  {
+                    title: "Done",
+                  },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item label="Actions">
+              <Button
+                type="default"
+                style={{ right: 0 }}
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                Back
+              </Button>
+              <Button
+                type="primary"
+                style={{ marginLeft: "5px" }}
+                htmlType="submit"
+                loading={loading}
+              >
+                Save
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+    </div>
   );
 }
