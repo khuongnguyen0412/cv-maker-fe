@@ -21,7 +21,7 @@ function MainLayout(props: any) {
   });
 
   return (
-    <Layout>
+    <Layout style={{minHeight:"100vh"}}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <LogoComponent />
         <MenuComponent />
