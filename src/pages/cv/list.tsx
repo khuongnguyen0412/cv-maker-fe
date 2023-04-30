@@ -159,7 +159,6 @@ export default function List() {
   ];
 
   return (
-    <MainLayout>
       <div className="container">
         <Divider style={{ fontSize: "28px" }}>MY CV</Divider>
         <Table
@@ -169,6 +168,5 @@ export default function List() {
           loading={loading}
         />
       </div>
-    </MainLayout>
   );
 }

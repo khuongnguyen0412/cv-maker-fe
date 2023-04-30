@@ -6,27 +6,45 @@ import { RequireAuth } from "./guards/RequireAuth";
 import Add from "./pages/cv/add";
 import List from "./pages/cv/list";
 import Edit from "./pages/cv/edit";
+import MainLayout from "./components/layout/MainLayout";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element=<RequireAuth>
-            <Home />
-          </RequireAuth>
-        />
-        <Route
-          path="/my-cv"
-          element=<RequireAuth>
-            <List />
-          </RequireAuth>
-        />
+        <Route element=<MainLayout />>
+          <Route
+            path="/"
+            element=<RequireAuth>
+              <Home />
+            </RequireAuth>
+          />
+          <Route
+            path="/my-cv"
+            element=<RequireAuth>
+              <List />
+            </RequireAuth>
+          />
+          <Route
+            path="/my-cv"
+            element=<RequireAuth>
+              <List />
+            </RequireAuth>
+          />
+          <Route
+            path="/my-cv/add"
+            element=<RequireAuth>
+              <Add />
+            </RequireAuth>
+          />
+          <Route
+            path="/my-cv/edit/:id"
+            element=<RequireAuth>
+              <Edit />
+            </RequireAuth>
+          />
+        </Route>
         <Route path="/login" element=<Login /> />
-        <Route path="/my-cv" element=<List /> />
-        <Route path="/my-cv/add" element=<Add /> />
-        <Route path="/my-cv/edit/:id" element=<Edit /> />
       </Routes>
     </Router>
   );
